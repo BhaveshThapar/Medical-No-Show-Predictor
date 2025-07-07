@@ -311,6 +311,34 @@ model_results = {}
 X_test_global = None
 y_test_global = None
 
+# Model training and initialization (runs on import)
+print("Medical Appointment No-Show Predictor")
+print("=" * 50)
+print("Training model with synthetic data...")
+df = predictor.preprocessor.load_and_clean_data("synthetic_data.csv")
+df = predictor.preprocessor.feature_engineering(df)
+X, y = predictor.preprocessor.prepare_features(df, fit_encoders=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+X_test_global = X_test
+y_test_global = y_test
+model_results = predictor.train_models(X_train, y_train, X_test, y_test)
+
+# Optionally print model summary
+print("\nModel Performance Summary:")
+print("-" * 30)
+for name, result in model_results.items():
+    metrics = result['metrics']
+    print(f"{name:20} | AUC: {metrics['roc_auc']:.3f} | F1: {metrics['f1']:.3f} | Precision: {metrics['precision']:.3f} | Recall: {metrics['recall']:.3f}")
+print(f"\nBest model: {predictor.best_model_name}")
+importance_df = predictor.get_feature_importance(X.columns)
+if importance_df is not None:
+    print("\nTop 5 Most Important Features:")
+    print("-" * 35)
+    for idx, row in importance_df.head().iterrows():
+        print(f"  {row['feature']:20} | {row['importance']:.4f}")
+print("\nStarting web dashboard...")
+print("Press Ctrl+C to stop the server")
+
 @app.route('/')
 def dashboard():
     """The main dashboard where everything happens"""
@@ -737,70 +765,7 @@ def predict():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-@app.route('/train', methods=['POST'])
-def train_model():
-    """Train the models with fresh data"""
-    global model_results, X_test_global, y_test_global
-    
-    try:
-        print("Loading and preparing data...")
-        df = predictor.preprocessor.load_and_clean_data("synthetic_data.csv")
-        df = predictor.preprocessor.feature_engineering(df)
-        X, y = predictor.preprocessor.prepare_features(df, fit_encoders=True)
-        
-        print("Splitting data for training and testing...")
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-        
-        # Store test data globally for performance metrics
-        X_test_global = X_test
-        y_test_global = y_test
-        
-        print("Training models...")
-        model_results = predictor.train_models(X_train, y_train, X_test, y_test)
-        
-        return jsonify({
-            'success': True,
-            'best_model': predictor.best_model_name,
-            'metrics': model_results[predictor.best_model_name]['metrics']
-        })
-    
-    except Exception as e:
-        return jsonify({'error': str(e)})
-
 if __name__ == '__main__':
-    print("Medical Appointment No-Show Predictor")
-    print("=" * 50)
-    
-    # Train the model on startup
-    print("Training model with synthetic data...")
-    df = predictor.preprocessor.load_and_clean_data("synthetic_data.csv")
-    df = predictor.preprocessor.feature_engineering(df)
-    X, y = predictor.preprocessor.prepare_features(df, fit_encoders=True)
-    
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-    X_test_global = X_test
-    y_test_global = y_test
-    
-    model_results = predictor.train_models(X_train, y_train, X_test, y_test)
-    
-    print("\nModel Performance Summary:")
-    print("-" * 30)
-    for name, result in model_results.items():
-        metrics = result['metrics']
-        print(f"{name:20} | AUC: {metrics['roc_auc']:.3f} | F1: {metrics['f1']:.3f} | Precision: {metrics['precision']:.3f} | Recall: {metrics['recall']:.3f}")
-    
-    print(f"\nBest model: {predictor.best_model_name}")
-    
-    # Show feature importance if available
-    importance_df = predictor.get_feature_importance(X.columns)
-    if importance_df is not None:
-        print("\nTop 5 Most Important Features:")
-        print("-" * 35)
-        for idx, row in importance_df.head().iterrows():
-            print(f"  {row['feature']:20} | {row['importance']:.4f}")
-    
-    print("\nStarting web dashboard...")
-    print("Open your browser and go to: http://localhost:5000")
-    print("Press Ctrl+C to stop the server")
-    
-    app.run(debug=True, port=5000)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
