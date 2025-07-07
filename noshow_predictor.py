@@ -319,11 +319,12 @@ def dashboard():
     <html>
     <head>
         <title>Medical Appointment No-Show Predictor Dashboard</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.18.0/plotly.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
             body { background: linear-gradient(135deg, #e3f2fd 0%, #f8f9ff 100%); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-            
+            .container-fluid { padding-left: 0.5rem; padding-right: 0.5rem; }
             .metric-card { 
                 background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%); 
                 color: white; 
@@ -331,41 +332,47 @@ def dashboard():
                 box-shadow: 0 8px 20px rgba(21, 101, 192, 0.3);
                 border-left: 5px solid #00c853;
                 transition: transform 0.2s ease;
+                margin-bottom: 1rem;
             }
             .metric-card:hover { transform: translateY(-5px); }
-            
             .prediction-card { 
                 background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%); 
                 color: white;
                 border-radius: 15px;
                 box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
                 border-left: 5px solid #ff5722;
+                margin-bottom: 1rem;
             }
-            
             .chart-container { 
                 background: white; 
                 border-radius: 15px; 
                 box-shadow: 0 8px 25px rgba(0,0,0,0.1);
                 border-left: 5px solid #4caf50;
                 transition: box-shadow 0.3s ease;
+                margin-bottom: 1rem;
             }
             .chart-container:hover { box-shadow: 0 12px 35px rgba(0,0,0,0.15); }
-            
             h1 { 
                 color: #1565c0; 
                 font-weight: 700;
                 text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
                 margin-bottom: 2rem;
+                font-size: 2rem;
             }
-            
+            @media (max-width: 767px) {
+                h1 { font-size: 1.3rem; }
+                .metric-card, .prediction-card, .chart-container, .card { border-radius: 10px; }
+                .card-header { border-radius: 10px 10px 0 0 !important; }
+                .container-fluid { padding-left: 0.2rem; padding-right: 0.2rem; }
+            }
             .card { 
                 border: none;
                 border-radius: 15px;
                 box-shadow: 0 6px 20px rgba(0,0,0,0.08);
                 transition: all 0.3s ease;
+                margin-bottom: 1rem;
             }
             .card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
-            
             .card-header { 
                 background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
                 color: white;
@@ -373,7 +380,6 @@ def dashboard():
                 border: none;
                 font-weight: 600;
             }
-            
             .form-control, .form-select {
                 border: 2px solid #e0e0e0;
                 border-radius: 10px;
@@ -384,7 +390,6 @@ def dashboard():
                 border-color: #4caf50;
                 box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
             }
-            
             .btn-primary {
                 background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
                 border: none;
@@ -401,32 +406,27 @@ def dashboard():
                 box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
                 background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
             }
-            
             .alert {
                 border-radius: 10px;
                 border: none;
                 font-weight: 600;
             }
-            
             .medical-icon {
                 font-size: 1.2em;
                 margin-right: 8px;
                 color: #4caf50;
             }
-            
             label {
                 font-weight: 600;
                 color: #1565c0;
                 margin-bottom: 8px;
                 display: block;
             }
-            
             .metric-value {
                 font-size: 2.5rem;
                 font-weight: 700;
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
             }
-            
             .metric-label {
                 font-size: 0.9rem;
                 font-weight: 500;
@@ -438,52 +438,49 @@ def dashboard():
     </head>
     <body class="bg-light">
         <div class="container-fluid py-4">
-            <h1 class="text-center mb-4">🏥 Medical Appointment No-Show Predictor</h1>
-            
+            <h1 class="text-center mb-4">Medical Appointment No-Show Predictor</h1>
             <div class="row mb-4">
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="card metric-card text-center p-3">
                         <h3 id="accuracy">-</h3>
                         <p>Accuracy</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="card metric-card text-center p-3">
                         <h3 id="precision">-</h3>
                         <p>Precision</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="card metric-card text-center p-3">
                         <h3 id="recall">-</h3>
                         <p>Recall</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="card metric-card text-center p-3">
                         <h3 id="roc_auc">-</h3>
                         <p>ROC AUC</p>
                     </div>
                 </div>
             </div>
-
             <div class="row mb-4">
-                <div class="col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="card chart-container p-3">
                         <h5>ROC Curve</h5>
                         <div id="roc-curve"></div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="card chart-container p-3">
                         <h5>Feature Importance</h5>
                         <div id="feature-importance"></div>
                     </div>
                 </div>
             </div>
-
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-12 col-lg-8">
                     <div class="card">
                         <div class="card-header">
                             <h5>Single Patient Prediction</h5>
@@ -491,7 +488,7 @@ def dashboard():
                         <div class="card-body">
                             <form id="prediction-form">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-md-4">
                                         <div class="mb-3">
                                             <label>Age</label>
                                             <input type="number" class="form-control" name="Age" value="35" min="0" max="100">
@@ -508,7 +505,7 @@ def dashboard():
                                             <input type="number" class="form-control" name="days_between" value="5" min="0">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-md-4">
                                         <div class="mb-3">
                                             <label>SMS Received</label>
                                             <select class="form-control" name="SMS_received">
@@ -531,7 +528,7 @@ def dashboard():
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-md-4">
                                         <div class="mb-3">
                                             <label>Diabetes</label>
                                             <select class="form-control" name="Diabetes">
@@ -558,12 +555,12 @@ def dashboard():
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Predict No-Show Risk</button>
+                                <button type="submit" class="btn btn-primary w-100 mt-2">Predict No-Show Risk</button>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-12 col-lg-4">
                     <div class="card prediction-card">
                         <div class="card-body text-center">
                             <h5>Prediction Result</h5>
@@ -771,7 +768,7 @@ def train_model():
         return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
-    print("🏥 Medical Appointment No-Show Predictor")
+    print("Medical Appointment No-Show Predictor")
     print("=" * 50)
     
     # Train the model on startup
@@ -786,23 +783,23 @@ if __name__ == '__main__':
     
     model_results = predictor.train_models(X_train, y_train, X_test, y_test)
     
-    print("\n📊 Model Performance Summary:")
+    print("\nModel Performance Summary:")
     print("-" * 30)
     for name, result in model_results.items():
         metrics = result['metrics']
         print(f"{name:20} | AUC: {metrics['roc_auc']:.3f} | F1: {metrics['f1']:.3f} | Precision: {metrics['precision']:.3f} | Recall: {metrics['recall']:.3f}")
     
-    print(f"\n🏆 Best model: {predictor.best_model_name}")
+    print(f"\nBest model: {predictor.best_model_name}")
     
     # Show feature importance if available
     importance_df = predictor.get_feature_importance(X.columns)
     if importance_df is not None:
-        print("\n🔍 Top 5 Most Important Features:")
+        print("\nTop 5 Most Important Features:")
         print("-" * 35)
         for idx, row in importance_df.head().iterrows():
             print(f"  {row['feature']:20} | {row['importance']:.4f}")
     
-    print("\n🌐 Starting web dashboard...")
+    print("\nStarting web dashboard...")
     print("Open your browser and go to: http://localhost:5000")
     print("Press Ctrl+C to stop the server")
     

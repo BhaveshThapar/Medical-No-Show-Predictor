@@ -1,8 +1,8 @@
-# 🏥 Medical Appointment No-Show Predictor
+# Medical Appointment No-Show Predictor
 
 A comprehensive machine learning system that predicts patient no-show probability for medical appointments, featuring a complete ML pipeline, REST API, and interactive web dashboard.
 
-## 🎯 Project Overview
+## Project Overview
 
 This project demonstrates end-to-end machine learning engineering skills by solving a real healthcare problem: predicting which patients are likely to miss their medical appointments. The system helps healthcare providers optimize scheduling and reduce wasted resources.
 
@@ -13,7 +13,7 @@ This project demonstrates end-to-end machine learning engineering skills by solv
 - **Interactive Dashboard**: Professional medical-themed web interface with real-time visualizations
 - **Comprehensive Analytics**: ROC curves, feature importance analysis, and performance metrics
 
-## 🔧 Technical Stack
+## Technical Stack
 
 ### Machine Learning & Data Science
 - **Python 3.8+**
@@ -32,7 +32,7 @@ This project demonstrates end-to-end machine learning engineering skills by solv
 - **RESTful API Design**: Industry-standard API endpoints
 - **Responsive Design**: Mobile-friendly interface
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 ```bash
@@ -62,7 +62,7 @@ python noshow_predictor.py
 Open your browser to: http://localhost:5000
 ```
 
-## 📊 Dataset & Features
+## Dataset & Features
 
 ### Original Data Structure
 The system works with medical appointment datasets containing:
@@ -78,7 +78,7 @@ The system automatically creates additional predictive features:
 - **Age Groups**: Categorical age segmentation
 - **Condition Aggregation**: Total number of health conditions
 
-## 🤖 Machine Learning Pipeline
+## Machine Learning Pipeline
 
 ### 1. Data Preprocessing
 - **Automated Data Cleaning**: Handles missing values and outliers
@@ -97,7 +97,7 @@ The system automatically creates additional predictive features:
 - **Visualization**: ROC curves and feature importance plots
 - **Performance Monitoring**: Real-time metrics dashboard
 
-## 🌐 API Documentation
+## API Documentation
 
 ### Endpoints
 
@@ -139,7 +139,7 @@ The system automatically creates additional predictive features:
 - **Description**: Trigger model retraining
 - **Returns**: Training results and best model information
 
-## 📈 Dashboard Features
+## Dashboard Features
 
 ### Performance Metrics
 - **Real-time KPIs**: Accuracy, Precision, Recall, ROC-AUC scores
@@ -152,7 +152,7 @@ The system automatically creates additional predictive features:
 - **Risk Categorization**: Color-coded risk levels (Low/Medium/High)
 - **Medical Theming**: Professional healthcare-focused design
 
-## 🛠️ Technical Challenges Solved
+## Technical Challenges Solved
 
 1. **Class Imbalance**: Implemented stratified sampling and appropriate metrics for imbalanced healthcare data
 2. **Feature Engineering**: Created domain-specific features from temporal and categorical data
@@ -160,7 +160,7 @@ The system automatically creates additional predictive features:
 4. **Production Deployment**: Built scalable API with error handling and monitoring
 5. **User Experience**: Created intuitive medical-themed interface for healthcare professionals
 
-## 📝 Future Enhancements
+## Future Enhancements
 
 - **Database Integration**: PostgreSQL/MongoDB for data persistence
 - **Advanced ML**: Deep learning models and ensemble methods
@@ -169,7 +169,7 @@ The system automatically creates additional predictive features:
 - **A/B Testing**: Framework for model performance comparison
 - **Security**: Authentication and data encryption for HIPAA compliance
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
