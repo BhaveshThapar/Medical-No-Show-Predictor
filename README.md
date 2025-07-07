@@ -1,3 +1,4 @@
+# View it live: https://medical-no-show-predictor.onrender.com/
 # Medical Appointment No-Show Predictor
 
 A comprehensive machine learning system that predicts patient no-show probability for medical appointments, featuring a complete ML pipeline, REST API, and interactive web dashboard.
@@ -49,7 +50,7 @@ cd medical-noshow-predictor
 
 2. **Install dependencies**
 ```bash
-pip install pandas numpy scikit-learn flask plotly joblib
+pip install -r requirements.txt
 ```
 
 3. **Run the application**
